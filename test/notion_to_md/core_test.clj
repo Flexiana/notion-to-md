@@ -1,6 +1,6 @@
-(ns app.core-test
+(ns notion-to-md.core-test
   (:require
-    [app.core :as c]
+    [notion-to-md.core :as c]
     [clojure.test :as t]))
 
 (def file-parser
