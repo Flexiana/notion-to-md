@@ -1,7 +1,7 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
-    [app.http-client :as http-client]
+    [notion-to-md.http-client :as http-client]
     [clojure.java.io :as io]
     [clojure.string :as str]
     [environ.core :refer [env]])
