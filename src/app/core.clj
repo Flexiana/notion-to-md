@@ -1,17 +1,3 @@
-;; API reference: https://developers.notion.com/reference/block
-;; Markdown reference: https://www.markdownguide.org/basic-syntax/
-
-;; Known issues and considerations
-
-;; UNSUPPORTED
-;; "table_of_contents" (:table_of_contents element) doesnt provide data.
-;; "table" provides "unsupported" for each row.
-;; "child_database" is complex and probably is not going to be used at a README.md so it's not supported by the tool.
-;; "link_preview" I wasn't able to generate a link-preview at Notion. If there is such a case, we could fix the tool.
-
-;; Avoid using "link_to_page". Use subpages instead. Reason: A "link_to_page" is going to be inlined for technical reasons (the link's title is not easy to get). So, just use subpages for the README files.
-
-;; Remember to click to "share" at the Notion page which will be imported
 (ns app.core
   (:gen-class)
   (:require
