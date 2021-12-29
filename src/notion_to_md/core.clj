@@ -425,10 +425,3 @@
     (and secret page-id) (create-readme! secret page-id)
     (= 2 (count args)) (let [[secret page-id] args] (create-readme! secret page-id))
     :else (println help)))
-
-(comment
-  (-main "321")
-  (-main 1 2 3)
-  (-main)
-  (-main "321" "1321")
-  (-main "secret_j2oz4EjP4arconAxGobpFOop84MzpPPdb8ZU1ay3Df8 " "b861e277e4b14f44bc34f4b562d7e4ed"))
