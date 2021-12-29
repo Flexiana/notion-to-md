@@ -1,32 +1,24 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
-    [notion-to-md.http-client :as http-client]
     [clojure.java.io :as io]
     [clojure.string :as str]
-    [environ.core :refer [env]])
+    [environ.core :refer [env]]
+    [notion-to-md.http-client :as http-client])
   (:import
     (java.io
       File)))
 
-
-(def secret (env :secret)) ; something like "secret_j2oz4EjP4arconAxGobpFOop84MzpPPdb8ZU1ay3Df8"
-(def readme-id (env :readme-id)) ; something like "b861e277e4b14f44bc34f4b562d7e4ed"
 (def docs-path "docs/readme/") ; must end with /
+(def fetch-children (atom (fn [])))
 
 (declare ->md)
 (declare element->md)
-
-
-(def fetch-children
-  (http-client/fetch-children secret))
-
 
 (def heading-chars
   {:heading_1 "#"
    :heading_2 "##"
    :heading_3 "###"})
-
 
 (def no-annotations
   {:bold false
@@ -34,13 +26,11 @@
    :strikethrough false
    :code false})
 
-
 (def md-chars
   {:bold "**"
    :italic "*"
    :strikethrough "~~"
    :code "`"})
-
 
 (defn sort-md-chars
   "They must be sorted this way to show fine at github"
@@ -66,7 +56,6 @@
           (compare k1 k2))))
     coll))
 
-
 (defn spaces-prefix
   "Example: 
   input '  abc' 
@@ -74,7 +63,6 @@
   [text]
   (apply str
          (take-while (fn [c] (= c \space)) text)))
-
 
 (defn spaces-suffix
   "Example: 
@@ -85,12 +73,10 @@
        reverse
        spaces-prefix))
 
-
 (defn ->spaces-affixes
   [text]
   {:prefix (spaces-prefix text)
    :suffix (spaces-suffix text)})
-
 
 (defn apply-space-affixes
   "Example: 
@@ -100,14 +86,12 @@
   (let [{:keys [prefix suffix]} (->spaces-affixes raw-text)]
     (str prefix processed-text suffix)))
 
-
 (defn- surround
   "Example: 
   text 'abc'  surrounding '*'
   output '*abc*'"
   [text surrounding]
   (str surrounding text surrounding))
-
 
 (defn apply-annotations
   "Example: 
@@ -141,14 +125,12 @@
       text
       (apply-space-affixes text text-with-marks))))
 
-
 (defn code->md
   [text language]
   (str "```" language "\n"
        text
        "\n"
        "```\n"))
-
 
 (defn parse-text
   "input: a https://developers.notion.com/reference/rich-text
@@ -157,7 +139,6 @@
   (if-let [link (get-in text-element [:text :link :url])]
     (str "[" (apply-annotations text-element) "](" link ")")
     (apply-annotations text-element)))
-
 
 (defn parse-image!
   "Creates a file and returns a file link markdown formatted
@@ -172,6 +153,10 @@
     (str
       "![" file-name "](" docs-path file-name ")")))
 
+(defn fetch-notion-children [id]
+  (->> id
+       (@fetch-children)
+       :results))
 
 (defn parse-paragraph
   "Paragraph blocks
@@ -184,11 +169,8 @@
         texts (map parse-text text)]
     (if has_children
       (str (reduce str texts) "\n"
-           "\n" (element->md (->> id
-                                  fetch-children
-                                  :results)))
+           "\n" (element->md (fetch-notion-children id)))
       (str (reduce str texts) "\n"))))
-
 
 (defn placeholder-parser
   "Parser not supported or not implemented.
@@ -198,7 +180,6 @@
     (reduce str (map parse-text text-coll))
     (str "\n?" element "?\n")))
 
-
 (defn parse-heading
   "See https://developers.notion.com/reference/block heading blocks"
   [heading-key]
@@ -206,13 +187,11 @@
     (let [{:keys [text]} (heading-key block)]
       (str "\n" (heading-key heading-chars) " " (reduce str (map parse-text text)) "\n"))))
 
-
 (defn parse-code
   "returns ```language\ncode;\n```"
   [{:keys [code]}]
   (let [text (reduce str (map parse-text (:text code)))]
     (code->md text (:language code))))
-
 
 (defn parse-callout
   "An emoji plus a text"
@@ -224,12 +203,9 @@
                     (str text "\n"))]
       (if has_children
         (str "- " content
-             (element->md (->> id
-                               fetch-children
-                               :results)
+             (element->md (fetch-notion-children id)
                           prefix))
         (str "- " content)))))
-
 
 (defn parse-quote
   "https://www.markdownguide.org/basic-syntax/#blockquotes-1"
@@ -238,12 +214,9 @@
     (let [text (reduce str (map parse-text (:text quote)))]
       (if has_children
         (str "> " text "\n"
-             (element->md (->> id
-                               fetch-children
-                               :results)
+             (element->md (fetch-notion-children id)
                           prefix))
         (str "> " text "\n")))))
-
 
 (defn parse-bulleted-list-item
   "https://www.markdownguide.org/basic-syntax/#unordered-lists"
@@ -252,12 +225,9 @@
     (let [text (reduce str (map parse-text (:text bulleted_list_item)))]
       (if has_children
         (str "- " text "\n\n"
-             (element->md (->> id
-                               fetch-children
-                               :results)
+             (element->md (fetch-notion-children id)
                           prefix))
         (str "- " text "\n")))))
-
 
 (defn parse-numbered_list_item
   "https://www.markdownguide.org/basic-syntax/#ordered-lists"
@@ -266,12 +236,9 @@
     (let [text (reduce str (map parse-text (:text numbered_list_item)))]
       (if has_children
         (str "1. " text "\n\n"
-             (element->md (->> id
-                               fetch-children
-                               :results)
+             (element->md (fetch-notion-children id)
                           prefix))
         (str "1. " text "\n")))))
-
 
 (defn parse-todo
   "A TODO checkbox. If its checked, represent it as markdown"
@@ -281,12 +248,9 @@
           check-and-text (str "- [" (if (:checked to_do) "x" " ") "] " text "\n")]
       (if has_children
         (str check-and-text
-             (element->md (->> id
-                               fetch-children
-                               :results)
+             (element->md (fetch-notion-children id)
                           prefix))
         (str check-and-text)))))
-
 
 (defn parse-file
   "Returns a '[type](link)' "
@@ -301,18 +265,15 @@
                     (name kind))]
       (str "[" caption "](" url ")\n"))))
 
-
 (defn parse-divider
   [_]
   (str "\n---\n"))
-
 
 (defn parse-equation
   [{:keys [equation]}]
   (code->md
     (:expression equation)
     "undefined"))
-
 
 (defn parse-toggle!
   "Returns a <details> html element that will be rendered as a button to fold content"
@@ -323,11 +284,8 @@
     (reduce str (map parse-text (:text toggle)))
     "\n</summary>\n\n"
     (when has_children
-      (element->md (->> id
-                        fetch-children
-                        :results)))
+      (element->md (fetch-notion-children id)))
     "</details>\n"))
-
 
 (defn parse-child-page!
   "Creates a file and returns a link to it"
@@ -337,14 +295,12 @@
       (if has_children
         (let [file-name (str title ".md")
               link-to-file (str/replace file-name " " "%20")]
-          (->md (->> id
-                     fetch-children)
+          (->md (@fetch-children id)
                 (str docs-path file-name))
           (str "[" title "](" (if (= current-file "README.md")
                                 docs-path
                                 "./") link-to-file ")\n"))
         title))))
-
 
 (defn parse-template!
   "Parses the template type from notion."
@@ -353,51 +309,37 @@
         prefix (reduce str (map parse-text text))]
     (if has_children
       (str prefix "\n"
-           (element->md (->> id
-                             fetch-children
-                             :results)))
+           (element->md (fetch-notion-children id)))
       prefix)))
-
 
 (defn parse-synced-block!
   "Parses a synced_block, returns it's original content"
   [{:keys [synced_block has_children id]}]
   (if has_children
-    (element->md (->> id
-                      fetch-children
-                      :results))
-    (element->md (->> [:synced_from :block_id]
-                      (get-in synced_block)
-                      fetch-children
-                      :results))))
-
+    (element->md (fetch-notion-children id))
+    (element->md (-> (get-in synced_block [:synced_from :block_id])
+                     (@fetch-children)
+                     :results))))
 
 (defn parse-link-to-page!
   "Returns the content from the page. 
    Doesn't return a markdown link"
   [{:keys [link_to_page]}]
   (element->md (->> (:page_id link_to_page)
-                    fetch-children
+                    (@fetch-children)
                     :results)))
-
 
 (defn parse-column-list!
   "Returns the children content"
   [{:keys [id has_children]}]
   (when has_children
-    (element->md (->> id
-                      fetch-children
-                      :results))))
-
+    (element->md (fetch-notion-children id))))
 
 (defn parse-column!
   "Returns the children content"
   [{:keys [id has_children]}]
   (when has_children
-    (element->md (->> id
-                      fetch-children
-                      :results))))
-
+    (element->md (fetch-notion-children id))))
 
 (defn parsers
   "input: type of notion element; optional prefix for recursiveness; current file-name
@@ -432,7 +374,6 @@
        :child_page (parse-child-page! file-name)})
     placeholder-parser))
 
-
 (defn element->content
   "input: prefix (optional) to prepend to md content if nested
           file-name the current md file-name
@@ -443,7 +384,6 @@
     (let [k (keyword (:type element))
           parser (parsers k prefix file-name)]
       (parser element))))
-
 
 (defn element->md
   "input: :results (coll) from the notion API https://api.notion.com/v1/blocks/<id>/children
@@ -457,7 +397,6 @@
            (map (fn [item] (str prefix item "\n"))
                 (map (element->content prefix file-name) results)))))
 
-
 (defn ->md
   "input: :results (coll) from the notion API https://api.notion.com/v1/blocks/<id>/children
    file-name: the current md file being generated
@@ -467,12 +406,29 @@
   (spit file-name
         (element->md results nil file-name)))
 
+(def secret (env :notion-api-secret))
+(def page-id (env :notion-page-id))
+
+(defn create-readme!
+  [secret page-id]
+  (io/make-parents docs-path "keep.md")
+  (reset! fetch-children (http-client/fetch-children secret))
+  (->md (@fetch-children page-id)
+        "README.md")
+  (println "Done"))
+
+(def help "You must set the NOTION_API_SECRET and NOTION_PAGE_ID environment variables.\nOther way to use this program is to pass 2 parameters: secret and page_id.\nExample:\n./notion-to-md secret_j892013joiaiuae0912401720293uojdioaw8903428 b861e277e4b14f44bc34f4b562d7e4ed ")
 
 (defn -main
-  [& _]
-  (if (and secret readme-id)
-    (do (io/make-parents docs-path "keep.md")
-        (->md (fetch-children readme-id)
-              "README.md")
-        (println "Done"))
-    (println "You must set the 'secret' and 'readme_id' environment variables")))
+  [& args]
+  (cond
+    (and secret page-id) (create-readme! secret page-id)
+    (= 2 (count args)) (let [[secret page-id] args] (create-readme! secret page-id))
+    :else (println help)))
+
+(comment
+  (-main "321")
+  (-main 1 2 3)
+  (-main)
+  (-main "321" "1321")
+  (-main "secret_j2oz4EjP4arconAxGobpFOop84MzpPPdb8ZU1ay3Df8 " "b861e277e4b14f44bc34f4b562d7e4ed"))
