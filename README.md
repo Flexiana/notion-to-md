@@ -31,7 +31,7 @@ There are some ways you can use this tool.
 
 	```clojure
   :profiles {:local
-{:dependencies
+ {:dependencies
               [[clj-http "3.12.3"]
                [org.clojars.danielhvs/notion-to-md "0.1.0"]]}}
   :aliases {"notion-to-md"     
