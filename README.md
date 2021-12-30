@@ -18,11 +18,6 @@ Examples:
 
 [Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/my-integrations)
 
-```c
-  int x = 3;
-
-```
-
 
 ## **Usage**
 
@@ -43,6 +38,14 @@ There are some ways you can use this tool.
                "notion-to-md.core"]}
 
 	```
+
+	- inside!
+
+		```c
+  int x = 3;
+
+		```
+
 
 
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
