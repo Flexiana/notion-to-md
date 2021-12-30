@@ -36,7 +36,7 @@ There are some ways you can use this tool.
              "run" 
              "-m" 
              "notion-to-md.core"]}
-	```clojure
+	```
 
 
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
