@@ -25,7 +25,7 @@ There are some ways you can use this tool.
 
 - Using it via clojars is the preferred way. Add the below to your project.clj file and then invoke it with `lein notion-to-md`
 
-	- ```clojure
+```clojure
 :profiles {:local
              {:dependencies
               [[clj-http "3.12.3"]
