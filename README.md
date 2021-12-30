@@ -18,6 +18,10 @@ Examples:
 
 [Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/my-integrations)
 
+```c
+    int x = 3;
+```
+
 
 ## **Usage**
 
@@ -42,7 +46,7 @@ There are some ways you can use this tool.
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
 
 	```bash
-export NOTION_PAGE_ID="<page-id>"
+    export NOTION_PAGE_ID="<page-id>"
 export NOTION_API_SECRET="<notion-secret>"
 lein run
 ```
@@ -51,7 +55,7 @@ lein run
 - Passing as the id and secret as parameters:
 
 	```bash
-lein run <notion-secret> <page-id>
+    lein run <notion-secret> <page-id>
 ```
 
 
