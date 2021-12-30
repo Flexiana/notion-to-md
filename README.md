@@ -19,7 +19,8 @@ Examples:
 [Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/my-integrations)
 
 ```c
-int x = 3;
+  int x = 3;
+
 ```
 
 
@@ -30,32 +31,35 @@ There are some ways you can use this tool.
 - Using it via clojars is the preferred way. Add the below to your project.clj file and then invoke it with `lein notion-to-md`
 
 	```clojure
-:profiles {:local
-             {:dependencies
-              [[clj-http "3.12.3"]
-               [org.clojars.danielhvs/notion-to-md "0.1.0"]]}}
-:aliases {"notion-to-md"     
-            ["with-profile" 
-             "local" 
-             "run" 
-             "-m" 
-             "notion-to-md.core"]}
+  :profiles {:local
+               {:dependencies
+                [[clj-http "3.12.3"]
+                 [org.clojars.danielhvs/notion-to-md "0.1.0"]]}}
+  :aliases {"notion-to-md"     
+              ["with-profile" 
+               "local" 
+               "run" 
+               "-m" 
+               "notion-to-md.core"]}
+
 	```
 
 
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
 
 	```bash
-export NOTION_PAGE_ID="<page-id>"
-export NOTION_API_SECRET="<notion-secret>"
-lein run
+  export NOTION_PAGE_ID="<page-id>"
+  export NOTION_API_SECRET="<notion-secret>"
+  lein run
+
 	```
 
 
 - Passing as the id and secret as parameters:
 
 	```bash
-lein run <notion-secret> <page-id>
+  lein run <notion-secret> <page-id>
+
 	```
 
 
