@@ -126,11 +126,17 @@
       (apply-space-affixes text text-with-marks))))
 
 (defn code->md
-  [text language]
+  [prefix text language]
   (str "```" language "\n"
-       text
+       (let [spaces (apply str
+                           (take (inc (count prefix))
+                                 (iterate str  "  ")))]
+         (->> text
+              str/split-lines
+              (map (fn [line] (str spaces line "\n")))
+              (apply str)))
        "\n"
-       "```\n"))
+       prefix "```\n"))
 
 (defn parse-text
   "input: a https://developers.notion.com/reference/rich-text
@@ -189,9 +195,10 @@
 
 (defn parse-code
   "returns ```language\ncode;\n```"
-  [{:keys [code]}]
-  (let [text (reduce str (map parse-text (:text code)))]
-    (code->md text (:language code))))
+  [prefix]
+  (fn [{:keys [code]}]
+    (let [text (reduce str (map parse-text (:text code)))]
+      (code->md prefix text (:language code)))))
 
 (defn parse-callout
   "An emoji plus a text"
@@ -269,11 +276,12 @@
   [_]
   (str "\n---\n"))
 
-(defn parse-equation
-  [{:keys [equation]}]
-  (code->md
-    (:expression equation)
-    "undefined"))
+(defn parse-equation [prefix]
+  (fn [{:keys [equation]}]
+    (code->md
+      prefix
+      (:expression equation)
+      "undefined")))
 
 (defn parse-toggle!
   "Returns a <details> html element that will be rendered as a button to fold content"
@@ -349,7 +357,7 @@
     (kind
       {:paragraph parse-paragraph
        :image parse-image!
-       :code parse-code
+       :code (parse-code prefix)
        :callout (parse-callout (str prefix "\t"))
        :toggle parse-toggle!
        :bulleted_list_item (parse-bulleted-list-item (str prefix "\t"))
@@ -359,7 +367,7 @@
        :numbered_list_item (parse-numbered_list_item (str prefix "\t"))
        :synced_block parse-synced-block!
        :to_do (parse-todo (str prefix "\t"))
-       :equation parse-equation
+       :equation (parse-equation prefix)
        :divider parse-divider
        :template parse-template!
        :quote (parse-quote (str prefix ">"))
