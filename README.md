@@ -28,7 +28,7 @@ There are some ways you can use this tool.
     :profiles {:local
                  {:dependencies
                   [[clj-http "3.12.3"]
-                   [org.clojars.danielhvs/notion-to-md "0.1.0"]]}}
+                   [org.clojars.danielhvs/notion-to-md "0.1.1"]]}}
     :aliases {"notion-to-md"     
                 ["with-profile" 
                  "local" 
