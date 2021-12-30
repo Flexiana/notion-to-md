@@ -30,12 +30,12 @@ There are some ways you can use this tool.
 
 - Using it via clojars is the preferred way. Add the below to your project.clj file and then invoke it with `lein notion-to-md`
 
-```clojure
+	```clojure
   :profiles {:local
                {:dependencies
                 [[clj-http "3.12.3"]
                  [org.clojars.danielhvs/notion-to-md "0.1.0"]]}}
-    :aliases {"notion-to-md"     
+  :aliases {"notion-to-md"     
               ["with-profile" 
                "local" 
                "run" 
@@ -52,7 +52,7 @@ There are some ways you can use this tool.
   export NOTION_API_SECRET="<notion-secret>"
   lein run
 
-	```
+```
 
 
 - Passing as the id and secret as parameters:
