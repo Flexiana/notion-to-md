@@ -43,7 +43,7 @@ There are some ways you can use this tool.
 
 		```c
 
-    int x = 3;
+      int x = 3;
 
 		```
 
