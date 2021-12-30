@@ -40,7 +40,7 @@ There are some ways you can use this tool.
              "run" 
              "-m" 
              "notion-to-md.core"]}
-```
+	```
 
 
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
@@ -49,13 +49,13 @@ There are some ways you can use this tool.
     export NOTION_PAGE_ID="<page-id>"
 export NOTION_API_SECRET="<notion-secret>"
 lein run
-```
+	```
 
 
 - Passing as the id and secret as parameters:
 
 	```bash
     lein run <notion-secret> <page-id>
-```
+	```
 
 
