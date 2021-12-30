@@ -6,9 +6,7 @@
 
 ## Concepts
 
-The Notion API requires a page-id and a notion-secret to provide the page’s content.
-
-[Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/)
+The Notion API requires a page-id and a notion-secret to provide the page’s content: [Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/)
 
 Examples:
 
@@ -16,7 +14,8 @@ Examples:
 
 - The notion-secret is obtained by the Notion’s workspace configuration. The secret its something like: secret_j2oz4j12ddjoalmdp91phesdahjlcsdwq0u11ay3Df8
 
-[Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/my-integrations)
+	[Notion - The all-in-one workspace for your notes, tasks, wikis, and databases.](https://www.notion.so/my-integrations)
+
 
 
 ## **Usage**
