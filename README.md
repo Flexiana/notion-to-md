@@ -42,7 +42,7 @@ There are some ways you can use this tool.
                "-m" 
                "notion-to-md.core"]}
 
-```
+	```
 
 
 - Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
