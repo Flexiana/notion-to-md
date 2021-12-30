@@ -42,7 +42,7 @@ There are some ways you can use this tool.
 	- inside!
 
 		```c
-  int x = 3;
+    int x = 3;
 
 		```
 
