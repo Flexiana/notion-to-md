@@ -153,7 +153,9 @@
   (let [url (-> image :file :url)
         caption (-> image :caption first)
         file-name (str (or (get-in caption [:text :content])
-                           (get-in caption [:plain_text])) ".png")]
+                           (get-in caption [:plain_text])
+                           (.toString (java.util.UUID/randomUUID)))
+                       ".png")]
     (io/copy (http-client/fetch-image url)
              (File. (str docs-path file-name)))
     (str
