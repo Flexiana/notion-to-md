@@ -3,6 +3,7 @@
 
 > notion-to-md is a tool to import Notion pages to a Markdown format. It creates the Readme files that can be committed to you preferred git repository.
 
+![c946dcfe-d08b-4e2b-9968-3159c9eac7e5.png](docs/readme/c946dcfe-d08b-4e2b-9968-3159c9eac7e5.png)
 
 ## Concepts
 
