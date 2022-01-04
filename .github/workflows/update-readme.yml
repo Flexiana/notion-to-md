@@ -1,0 +1,53 @@
+name: update-readme workflow
+
+on: workflow_dispatch
+
+jobs:
+  update-readme:
+    name: Update README notion->github
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'zulu'
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@3.4
+        with:
+          lein: 2.9.1
+
+      - name: create branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: 'documentation/update-readme'
+
+      - name: notion-to-md
+        env:
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          NOTION_API_SECRET: ${{ secrets.NOTION_API_SECRET }}
+        run: |
+          lein notion-to-md
+
+      - name: push to built branch
+        uses: Automattic/action-commit-to-branch@master
+        with:
+          branch: 'documentation/update-readme'
+          commit_message: 'Imported README from Notion'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: "documentation/update-readme"        
+          destination_branch: "development"                  
+          pr_title: "Update README (imported from notion)"
+          pr_body: ":crown: *Automated PR via github actions*"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
