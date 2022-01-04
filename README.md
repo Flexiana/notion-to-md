@@ -5,7 +5,7 @@
 
 The Notion API requires a page-id and a notion-secret to provide the page’s content: 
 
-[bookmark](https://www.notion.so/)
+[Notion](https://www.notion.so/)
 
 Examples:
 
@@ -13,7 +13,7 @@ Examples:
 
 - The notion-secret is obtained by the Notion’s workspace configuration. The secret its something like: secret_j2oz4j12ddjoalmdp91phesdahjlcsdwq0u11ay3Df8
 
-	[bookmark](https://www.notion.so/my-integrations)
+	[Notion Integrations](https://www.notion.so/my-integrations)
 
 
 
@@ -33,12 +33,12 @@ There are some ways you can use this tool.
                  "local" 
                  "run" 
                  "-m" 
-                 "notion-to-md.core"]
+                 "notion-to-md.core"]}
 
 	```
 
 
-- Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly
+- Using environment variables: NOTION_PAGE_ID and NOTION_API_SECRET and then invoking it directly. You can even integrate it with GitHub's actions exposing the above environment variables. See [https://docs.github.com/en/actions/learn-github-actions/environment-variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
 
 	```bash
     export NOTION_PAGE_ID="<page-id>"
