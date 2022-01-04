@@ -1,4 +1,4 @@
-(defproject org.clojars.danielhvs/notion-to-md "0.1.2"
+(defproject com.flexiana/notion-to-md "0.1.2"
   :description "Notion To Markdown converter"
   :uberjar-name "notion-to-md.jar"
   :test-paths ["test"]
