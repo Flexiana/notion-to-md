@@ -13,7 +13,7 @@ Examples:
 
 - The notion-secret is obtained by the Notion’s workspace configuration. The secret its something like: secret_j2oz4j12ddjoalmdp91phesdahjlcsdwq0u11ay3Df8
 
-	[Notion Integrations](https://www.notion.so/my-integrations)
+	[Notion Integration](https://www.notion.so/my-integrations)
 
 
 
@@ -27,7 +27,7 @@ There are some ways you can use this tool.
     :profiles {:local
                  {:dependencies
                   [[clj-http "3.12.3"]
-                   [org.clojars.danielhvs/notion-to-md "0.1.1"]]}}
+                   [com.flexiana/notion-to-md "0.1.2"]]}}
       :aliases {"notion-to-md"     
                 ["with-profile" 
                  "local" 
