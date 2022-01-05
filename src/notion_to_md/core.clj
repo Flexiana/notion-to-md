@@ -142,7 +142,8 @@
   "input: a https://developers.notion.com/reference/rich-text
    output: if its a link, [text] (link), else, the text with Markdown surroundings"
   [text-element]
-  (if-let [link (get-in text-element [:text :link :url])]
+  (if-let [link (or (:href text-element)
+                    (get-in text-element [:text :link :url]))]
     (str "[" (apply-annotations text-element) "](" link ")")
     (apply-annotations text-element)))
 
