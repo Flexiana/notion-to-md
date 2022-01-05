@@ -91,3 +91,7 @@ Sub pages are going to be automatically shared.
 - API reference: [https://developers.notion.com/reference/block](https://developers.notion.com/reference/block)
 
 
+## How to guides
+
+Update Readme on GitHub 
+
