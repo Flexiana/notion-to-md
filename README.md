@@ -1,6 +1,6 @@
 `notion-to-md` is a tool that fetches Notion page tree. Turning them into usual Markdown files. Used to sync Readme.
 
-It’s maintained at https://github.com/Flexiana/notion-to-md
+It’s maintained at [https://github.com/Flexiana/notion-to-md](https://github.com/Flexiana/notion-to-md)
 
 
 ## Concepts
@@ -93,5 +93,9 @@ Sub pages are going to be automatically shared.
 
 ## How to guides
 
+<<<<<<< Updated upstream
 Update Readme on GitHub 
+=======
+[Update Readme on GitHub](https://www.notion.so/d1ecfe6b4bae41b1b9d22aceca9fb989) 
+>>>>>>> Stashed changes
 
