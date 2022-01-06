@@ -7,10 +7,7 @@ Notion API requires a `page-id` and a `notion-secret` to be able to access a pag
 
 - If the url is [`https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d`](https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d), then `page-id` is [`8ddeb7e276c34685b460c5380f592f9d`](https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d).
 
-- `notion-secret` is obtained in Notion’s workspace configuration. The secret string looks something like `secret_j2oz4j12ddjoalmdp91phesdahjlcsdwq0u11ay3Df8`.
-
-	[Notion Integration reference](https://www.notion.so/my-integrations)
-
+- `notion-secret` is obtained in Notion’s workspace configuration. Go to [My Integrations](https://www.notion.so/my-integrations) & add a New Integration. After you follow the steps there, you’ll end up with a secret string that looks like this: `secret_j2oz4j12ddjoalmdp91phesdahjlcsdwq0u11ay3Df8`. 
 
 
 ## **Usage**
@@ -69,7 +66,7 @@ Pass arguments either by:
 
 ### Allowing access to Notion API
 
-To interact with the API, we first need to get permission from Notion itself. We have to give an integration user access to a page. To achieve this, follow the steps below.
+To interact with the API, we have to give the integration user access to page(s) we want to fetch. To achieve this, follow the steps below.
 
 1. Go to the page you want to fetch.
 
@@ -77,7 +74,7 @@ To interact with the API, we first need to get permission from Notion itself. We
 
 1. Click “Invite”.
 
-1. Select “Integration user”.
+1. Select the Integration user you have added prior to this.
 
 
 ### Notes
