@@ -18,7 +18,7 @@ Notion API requires a `page-id` and a `notion-secret` to be able to access a pag
 Add this to your dependencies:
 
 ```clojure
-  [com.flexiana/notion-to-md "0.1.2"]
+  [com.flexiana/notion-to-md "0.1.8"]
 
 ```
 
@@ -27,7 +27,7 @@ Alias it with the following:
 ```clojure
   :profiles {:local
                {:dependencies
-                [[com.flexiana/notion-to-md "0.1.2"]]}}
+                [[com.flexiana/notion-to-md "0.1.8"]]}}
     :aliases {"notion-to-md"     
               ["with-profile" 
                "local" 
