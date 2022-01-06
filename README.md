@@ -15,7 +15,7 @@ Notion API requires a `page-id` and a `notion-secret` to be able to access a pag
 
 ### Lein
 
-Addd thiss to your dependencies:
+Add this to your dependencies:
 
 ```clojure
   [com.flexiana/notion-to-md "0.1.2"]
