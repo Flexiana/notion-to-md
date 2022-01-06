@@ -12,10 +12,22 @@
   (:body (client/get url {:as :stream
                           :async? false})))
 
-(defn fetch-children [secret]
+(defn- fetch-children-paginated [secret id & opts]
+  (body->clj
+    (client/get
+      (str "https://api.notion.com/v1/blocks/" id "/children"
+           (when-let [start_cursor (first opts)]
+             (str "/?start_cursor=" start_cursor)))
+      {:headers {"Authorization" (str "Bearer " secret)
+                 "Notion-Version" "2021-08-16"}})))
+
+(defn fetch-children
+  "Returns a coll of blocks"
+  [secret]
   (fn [id]
-    (body->clj
-      (client/get
-        (str "https://api.notion.com/v1/blocks/" id "/children")
-        {:headers {"Authorization" (str "Bearer " secret)
-                   "Notion-Version" "2021-08-16"}}))))
+    (loop [response (fetch-children-paginated secret id)
+           result []]
+      (if-not (:has_more response)
+        (conj result response)
+        (recur (fetch-children-paginated secret id (:next_cursor response))
+               (conj result response))))))

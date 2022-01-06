@@ -163,7 +163,8 @@
   "Creates a file and returns a file link markdown formatted
    It assumes it's a png file"
   [{:keys [image]}]
-  (let [url (-> image :file :url)
+  (let [url (or (-> image :file :url)
+                (-> image :external :url))
         caption (-> image :caption first)
         file-name (str (or (get-in caption [:text :content])
                            (get-in caption [:plain_text])
@@ -175,9 +176,10 @@
       "![" file-name "](" docs-path file-name ")")))
 
 (defn fetch-notion-children [id]
-  (->> id
-       (@fetch-children)
-       :results))
+  (flatten
+    (reduce conj []
+            (map :results
+                 (@fetch-children id)))))
 
 (defn parse-paragraph
   "Paragraph blocks
@@ -321,7 +323,7 @@
                             (str ".md"))
               link-to-file (str/replace file-name " " "%20")]
           (->md {:results (into [(make-heading title)]
-                                (:results (@fetch-children id)))}
+                                (fetch-notion-children id))}
                 (str docs-path file-name))
           (str "[" title "](" (if (= current-file "README.md")
                                 docs-path
@@ -343,17 +345,15 @@
   [{:keys [synced_block has_children id]}]
   (if has_children
     (element->md (fetch-notion-children id))
-    (element->md (-> (get-in synced_block [:synced_from :block_id])
-                     (@fetch-children)
-                     :results))))
+    (element->md (fetch-notion-children
+                   (get-in synced_block [:synced_from :block_id])))))
 
 (defn parse-link-to-page!
   "Returns the content from the page. 
    Doesn't return a markdown link"
   [{:keys [link_to_page]}]
-  (element->md (->> (:page_id link_to_page)
-                    (@fetch-children)
-                    :results)))
+  (element->md (fetch-notion-children
+                 (:page_id link_to_page))))
 
 (defn parse-column-list!
   "Returns the children content"
@@ -445,7 +445,7 @@
   [secret page-id]
   (io/make-parents docs-path "keep.md")
   (reset! fetch-children (http-client/fetch-children secret))
-  (->md (@fetch-children page-id)
+  (->md {:results (fetch-notion-children page-id)}
         "README.md")
   (println "Done"))
 
