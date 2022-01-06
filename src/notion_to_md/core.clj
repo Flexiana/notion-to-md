@@ -342,17 +342,23 @@
                     (@fetch-children)
                     :results)))
 
-(defn parse-column-list!
+(defn parse-column-list! 
   "Returns the children content"
-  [{:keys [id has_children]}]
-  (when has_children
-    (element->md (fetch-notion-children id))))
+  [prefix file-name]
+  (fn
+    [{:keys [id has_children]}]
+    (when has_children
+      (element->md (fetch-notion-children id)
+                   prefix file-name))))
 
-(defn parse-column!
-  "Returns the children content"
-  [{:keys [id has_children]}]
-  (when has_children
-    (element->md (fetch-notion-children id))))
+(defn parse-column! 
+ "Returns the children content" 
+ [prefix file-name]
+  (fn
+    [{:keys [id has_children]}]
+    (when has_children
+      (element->md (fetch-notion-children id)
+                   prefix file-name))))
 
 (defn parsers
   "input: type of notion element; optional prefix for recursiveness; current file-name
@@ -367,8 +373,8 @@
        :toggle parse-toggle!
        :bulleted_list_item (parse-bulleted-list-item (str prefix "\t"))
        :link_to_page parse-link-to-page!
-       :column_list parse-column-list!
-       :column parse-column!
+       :column_list (parse-column-list! prefix file-name)
+       :column (parse-column! prefix file-name)
        :numbered_list_item (parse-numbered_list_item (str prefix "\t"))
        :synced_block parse-synced-block!
        :to_do (parse-todo (str prefix "\t"))
