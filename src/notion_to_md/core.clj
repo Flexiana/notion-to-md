@@ -304,7 +304,9 @@
   (fn [{:keys [child_page has_children id]}]
     (let [{:keys [title]} child_page]
       (if has_children
-        (let [file-name (str title ".md")
+        (let [file-name (-> title
+                            (str/replace "/" "-")
+                            (str ".md"))
               link-to-file (str/replace file-name " " "%20")]
           (->md (@fetch-children id)
                 (str docs-path file-name))
