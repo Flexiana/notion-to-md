@@ -162,18 +162,23 @@
 (defn parse-image!
   "Creates a file and returns a file link markdown formatted
    It assumes it's a png file"
-  [{:keys [image]}]
-  (let [url (or (-> image :file :url)
-                (-> image :external :url))
-        caption (-> image :caption first)
-        file-name (str (or (get-in caption [:text :content])
-                           (get-in caption [:plain_text])
-                           (.toString (java.util.UUID/randomUUID)))
-                       ".png")]
-    (io/copy (http-client/fetch-image url)
-             (File. (str docs-path file-name)))
-    (str
-      "![" file-name "](" docs-path file-name ")")))
+  [file-name]
+  (fn
+    [{:keys [image]}]
+    (let [url (or (-> image :file :url)
+                  (-> image :external :url))
+          image-caption (-> image :caption first)
+          title (str (or (get-in image-caption [:text :content])
+                         (get-in image-caption [:plain_text])
+                         (.toString (java.util.UUID/randomUUID)))
+                     ".png")]
+      (io/copy (http-client/fetch-image url)
+               (File. (str docs-path title)))
+      (str
+        "![" title "]"
+        "(" (if (= file-name "README.md") 
+              docs-path 
+              "./") title ")"))))
 
 (defn fetch-notion-children [id]
   (flatten
@@ -380,7 +385,7 @@
   (or
     (kind
       {:paragraph parse-paragraph
-       :image parse-image!
+       :image (parse-image! file-name)
        :code (parse-code prefix)
        :callout (parse-callout (str prefix "\t"))
        :toggle parse-toggle!
