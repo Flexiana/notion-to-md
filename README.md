@@ -1,9 +1,9 @@
-[Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Used to sync Readme files.
+[Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
 
 ## Concepts
 
-The Notion API requires a `page-id` and a `notion-secret` to access page content: 
+Notion API requires a `page-id` and a `notion-secret` to be able to access a page’s content: 
 
 - If the url is [`https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d`](https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d), then `page-id` is [`8ddeb7e276c34685b460c5380f592f9d`](https://www.notion.so/Testnet-8ddeb7e276c34685b460c5380f592f9d).
 
@@ -53,7 +53,7 @@ Pass arguments either by:
 
 	```
 
-	You can even integrate it with GitHub's actions, exposing the environment variables. See [https://docs.github.com/en/actions/learn-github-actions/environment-variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
+	This is the way to go when integrating GitHub actions. See [https://docs.github.com/en/actions/learn-github-actions/environment-variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
 
 
 - Or as parameters:
@@ -67,7 +67,7 @@ Pass arguments either by:
 
 
 
-### Allowing access to Notion’s API
+### Allowing access to Notion API
 
 To interact with the API, we first need to get permission from Notion itself. We have to give an integration user access to a page. To achieve this, follow the steps below.
 
@@ -92,7 +92,17 @@ The tool automatically fetches all sub pages as well.
 - API reference: [https://developers.notion.com/reference/block](https://developers.notion.com/reference/block)
 
 
-## How to guides
+## Authors
+
+Brought to you with ❤️ by [Flexiana](https://flexiana.com/).
+
+
+## License
+
+TODO: Apache License 2.0
+
+
+## How to guides [internal]
 
 [Update Readme on GitHub](https://www.notion.so/d1ecfe6b4bae41b1b9d22aceca9fb989) 
 
