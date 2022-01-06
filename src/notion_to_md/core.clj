@@ -32,6 +32,18 @@
    :strikethrough "~~"
    :code "`"})
 
+(defn make-heading [text]
+  {:object "block"
+   :has_children false
+   :type "heading_1"
+   :heading_1
+   {:text
+    [{:type "text"
+      :text {:content text :link nil}
+      :annotations no-annotations
+      :plain_text text
+      :href nil}]}})
+
 (defn sort-md-chars
   "They must be sorted this way to show fine at github"
   [coll]
@@ -308,7 +320,8 @@
                             (str/replace "/" "-")
                             (str ".md"))
               link-to-file (str/replace file-name " " "%20")]
-          (->md (@fetch-children id)
+          (->md {:results (into [(make-heading title)]
+                                (:results (@fetch-children id)))}
                 (str docs-path file-name))
           (str "[" title "](" (if (= current-file "README.md")
                                 docs-path
@@ -342,7 +355,7 @@
                     (@fetch-children)
                     :results)))
 
-(defn parse-column-list! 
+(defn parse-column-list!
   "Returns the children content"
   [prefix file-name]
   (fn
@@ -351,9 +364,9 @@
       (element->md (fetch-notion-children id)
                    prefix file-name))))
 
-(defn parse-column! 
- "Returns the children content" 
- [prefix file-name]
+(defn parse-column!
+  "Returns the children content"
+  [prefix file-name]
   (fn
     [{:keys [id has_children]}]
     (when has_children
