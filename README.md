@@ -62,8 +62,6 @@ Pass arguments either by:
 
 
 
-
-
 ### Allowing access to Notion API
 
 To interact with the API, we have to give the integration user access to page(s) we want to fetch. To achieve this, follow the steps below.
@@ -96,7 +94,7 @@ Brought to you with ❤️ by [Flexiana](https://flexiana.com/).
 
 ## License
 
-TODO: Apache License 2.0
+Copyright 2022 Flexiana
 
 
 ## How to guides [internal]
