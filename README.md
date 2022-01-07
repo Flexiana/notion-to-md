@@ -94,7 +94,9 @@ Brought to you with ❤️ by [Flexiana](https://flexiana.com/).
 
 ## License
 
-Copyright 2022 Flexiana
+Copyright 2022 Flexiana.
+
+Written and distributed under [**Apache License 2.0**](https://github.com/Flexiana/notion-to-md/blob/development/LICENSE)**.**
 
 
 ## How to guides [internal]
