@@ -1,4 +1,4 @@
-![GitHub License.png](docs/readme/GitHub%20License.png)
+![GitHub License](docs/readme/GitHub%20License)
 
 ![Clojars Project](https://img.shields.io/github/license/Flexiana/notion-to-md)
 
