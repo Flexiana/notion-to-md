@@ -1,3 +1,8 @@
+![GitHub License.png](docs/readme/GitHub License.png)
+
+![Clojars Project.png](docs/readme/Clojars Project.png)
+
+
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
 
