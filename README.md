@@ -6,9 +6,9 @@
 
 [<img src="docs/readme/GitHub%20License">](docs/readme/GitHub%20License)
 
-
-
 [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
+
+![Alt text](docs/readme/GitHub%20License)<img src="docs/readme/GitHub%20License">
 
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
