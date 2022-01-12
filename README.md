@@ -13,6 +13,9 @@
 ![Alt text](docs/readme/GitHub%20License.svg)
 <img src="docs/readme/GitHub%20License.svg">
 
+![Alt text](https://img.shields.io/github/license/Flexiana/notion-to-md)
+<img src="https://img.shields.io/github/license/Flexiana/notion-to-md">
+
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
 
