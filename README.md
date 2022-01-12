@@ -2,6 +2,8 @@
 
 ![Clojars Project.png](docs/readme/Clojars%20Project.png)
 
+[![Clojars Project.png](docs/readme/Clojars%20Project.png)](http://google.com.au/)
+
 
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
