@@ -4,6 +4,8 @@
 
 [<img src="https://img.shields.io/github/license/Flexiana/notion-to-md">](https://img.shields.io/github/license/Flexiana/notion-to-md)
 
+[<img src="docs/readme/GitHub%20License">](docs/readme/GitHub%20License)
+
 
 
 [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
