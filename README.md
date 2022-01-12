@@ -2,11 +2,9 @@
 
 ![Clojars Project.png](docs/readme/Clojars%20Project.png)
 
-[![Clojars Project.png](docs/readme/Clojars%20Project.png)](http://google.com.au/)
+[<img src="https://img.shields.io/github/license/Flexiana/notion-to-md">](https://img.shields.io/github/license/Flexiana/notion-to-md)
 
-[<img src="docs/readme/Clojars%20Project.png">](http://google.com.au/)
 
-[<img src="http://www.google.com.au/images/nav_logo7.png">](http://google.com.au/)
 
 [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
 
