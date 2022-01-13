@@ -1,10 +1,39 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
+    [clojure.data.xml :as xml]
     [clojure.java.io :as io]
     [clojure.string :as str]
     [environ.core :refer [env]]
-    [notion-to-md.http-client :as http-client]))
+    [notion-to-md.http-client :as http-client])
+  (:import
+    (java.io
+      File)
+    (javax.imageio
+      ImageIO)))
+
+(defn- svg?
+  [file-name]
+  (= :svg
+     (try
+       (-> file-name
+           slurp
+           java.io.StringReader.
+           xml/parse
+           :tag)
+       (catch Exception e
+         (-> e
+             .getMessage
+             println)))))
+
+(defn- image-format
+  [file]
+  (some-> (io/input-stream file)
+          ImageIO/createImageInputStream
+          ImageIO/getImageReaders
+          iterator-seq
+          first
+          .getFormatName))
 
 (def docs-path "docs/readme/") ; must end with /
 (def fetch-children (atom (fn [])))
@@ -156,16 +185,40 @@
     (str "[" (apply-annotations text-element) "](" link ")")
     (apply-annotations text-element)))
 
+(defn create-file!
+  "Creates a file and 
+  returns '![caption](file-path)'"
+  [caption url md-file-name]
+  (let [raw-file-name (str docs-path caption)]
+    (io/copy (http-client/fetch-image url)
+             (File. raw-file-name))
+    (let [title (str caption
+                     "."
+                     (or (image-format raw-file-name)
+                         (when (svg? raw-file-name) "svg")))
+          full-file-name (str docs-path title)]
+      (.renameTo (File. raw-file-name)
+                 (File. full-file-name))
+      (str
+        "![" title "]"
+        "(" (if (= md-file-name "README.md")
+              docs-path
+              "./") (str/replace title " " "%20") ")"))))
+
 (defn parse-image!
-  "Returns a '![caption](link)' "
-  [{:keys [image]}]
-  (let [url (or (-> image :file :url)
-                (-> image :external :url))
-        image-caption (-> image :caption first)
-        caption (str (or (get-in image-caption [:text :content])
-                         (get-in image-caption [:plain_text])
-                         (.toString (java.util.UUID/randomUUID))))]
-    (str "![" caption "]" "(" url ")")))
+  "Returns a '![caption](url)' 
+  If it's a notion hosted file, creates it"
+  [md-file-name]
+  (fn
+    [{:keys [image]}]
+    (let [image-caption (-> image :caption first)
+          caption (str (or (get-in image-caption [:text :content])
+                           (get-in image-caption [:plain_text])
+                           (.toString (java.util.UUID/randomUUID))))]
+      (if-let [url (-> image :external :url)]
+        (str "![" caption "]" "(" url ")")
+        (let [url (-> image :file :url)]
+          (create-file! caption url md-file-name))))))
 
 (defn fetch-notion-children [id]
   (flatten
@@ -372,7 +425,7 @@
   (or
     (kind
       {:paragraph parse-paragraph
-       :image parse-image!
+       :image (parse-image! file-name)
        :code (parse-code prefix)
        :callout (parse-callout (str prefix "\t"))
        :toggle parse-toggle!
