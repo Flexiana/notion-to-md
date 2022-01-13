@@ -1,6 +1,7 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
+    [clojure.data.xml :as xml]
     [clojure.java.io :as io]
     [clojure.string :as str]
     [environ.core :refer [env]]
@@ -10,6 +11,20 @@
       File)
     (javax.imageio
       ImageIO)))
+
+(defn- svg?
+  [file-name]
+  (= :svg
+     (try
+       (-> file-name
+           slurp
+           java.io.StringReader.
+           xml/parse
+           :tag)
+       (catch Exception e
+         (-> e
+             .getMessage
+             println)))))
 
 (defn- image-format
   [file]
@@ -187,7 +202,8 @@
                (File. raw-file-name))
       (let [title (str caption
                        "."
-                       (or (image-format raw-file-name) "svg")) ; FIXME little hacky
+                       (or (image-format raw-file-name)
+                           (when (svg? raw-file-name) "svg")))
             full-file-name (str docs-path title)]
         (.renameTo (File. raw-file-name)
                    (File. full-file-name))
@@ -195,7 +211,7 @@
           "![" title "]"
           "(" (if (= file-name "README.md")
                 docs-path
-                "./") (str/replace file-name " " "%20") ")")))))
+                "./") (str/replace title " " "%20") ")")))))
 
 (defn fetch-notion-children [id]
   (flatten
