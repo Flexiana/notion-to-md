@@ -7,6 +7,7 @@
   :deploy-repositories [["clojars" {:sign-releases false}]]
   :dependencies [[org.clojure/data.json "0.2.6"]
                  [environ "1.0.0"]
+                 [org.clojure/data.xml "0.0.8"]
                  [clj-http "3.12.3"]
                  [org.clojure/clojure "1.10.0"]]
   :profiles {:local
