@@ -1,3 +1,8 @@
+![GitHub License.svg](docs/readme/GitHub%20License.svg)
+
+![Clojars Project.svg](docs/readme/Clojars%20Project.svg)
+
+
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
 
@@ -62,6 +67,33 @@ Pass arguments either by:
 
 
 
+## Outputs
+
+- The main notion page (referenced by the NOTION_PAGE_ID environment variable) is going to generate the `README.md` file.
+
+- The sub pages and pictures are going to be created inside the `docs/readme/` folder.
+
+
+## Recommendations
+
+1. If using images, please define the caption. Otherwise `notion-to-md` is going to use random names for the images that will cause unwanted diffs on future pull requests.
+
+1. Avoid using "link_to_page". Use “sub pages” instead. Or use “mention” if you want to make a link. Reason: A "link_to_page" is going to be inlined for technical reasons (the link's title is not easy to get). So, just use “sub pages” or “mentions” for the README files.
+
+
+### Unsupported Notion types
+
+`notion-to-md` does not support the types below:
+
+1. "table_of_contents" doesn’t provide data.
+
+1. "table" provides "unsupported" for each row.
+
+1. "child_database" is complex and probably is not going to be used in a [`README.md`](http://README.md) so it's not supported by notion-to-md.
+
+1. "link_preview"
+
+
 ### Allowing access to Notion API
 
 To interact with the API, we have to give the integration user access to page(s) we want to fetch. To achieve this, follow the steps below.
@@ -102,4 +134,6 @@ Written and distributed under [**Apache License 2.0**](https://github.com/Flexia
 ## How to guides [internal]
 
 [Update Readme on GitHub](https://www.notion.so/d1ecfe6b4bae41b1b9d22aceca9fb989) 
+
+
 
