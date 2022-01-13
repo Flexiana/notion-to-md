@@ -1,13 +1,39 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
+    [clojure.data.xml :as xml]
     [clojure.java.io :as io]
     [clojure.string :as str]
     [environ.core :refer [env]]
     [notion-to-md.http-client :as http-client])
   (:import
     (java.io
-      File)))
+      File)
+    (javax.imageio
+      ImageIO)))
+
+(defn- svg?
+  [file-name]
+  (= :svg
+     (try
+       (-> file-name
+           slurp
+           java.io.StringReader.
+           xml/parse
+           :tag)
+       (catch Exception e
+         (-> e
+             .getMessage
+             println)))))
+
+(defn- image-format
+  [file]
+  (some-> (io/input-stream file)
+          ImageIO/createImageInputStream
+          ImageIO/getImageReaders
+          iterator-seq
+          first
+          .getFormatName))
 
 (def docs-path "docs/readme/") ; must end with /
 (def fetch-children (atom (fn [])))
@@ -161,24 +187,31 @@
 
 (defn parse-image!
   "Creates a file and returns a file link markdown formatted
-   It assumes it's a png file"
+   It detects the image type"
   [file-name]
   (fn
     [{:keys [image]}]
     (let [url (or (-> image :file :url)
                   (-> image :external :url))
           image-caption (-> image :caption first)
-          title (str (or (get-in image-caption [:text :content])
-                         (get-in image-caption [:plain_text])
-                         (.toString (java.util.UUID/randomUUID)))
-                     ".png")]
+          caption (str (or (get-in image-caption [:text :content])
+                           (get-in image-caption [:plain_text])
+                           (.toString (java.util.UUID/randomUUID))))
+          raw-file-name (str docs-path caption)]
       (io/copy (http-client/fetch-image url)
-               (File. (str docs-path title)))
-      (str
-        "![" title "]"
-        "(" (if (= file-name "README.md") 
-              docs-path 
-              "./") title ")"))))
+               (File. raw-file-name))
+      (let [title (str caption
+                       "."
+                       (or (image-format raw-file-name)
+                           (when (svg? raw-file-name) "svg")))
+            full-file-name (str docs-path title)]
+        (.renameTo (File. raw-file-name)
+                   (File. full-file-name))
+        (str
+          "![" title "]"
+          "(" (if (= file-name "README.md")
+                docs-path
+                "./") (str/replace title " " "%20") ")")))))
 
 (defn fetch-notion-children [id]
   (flatten
