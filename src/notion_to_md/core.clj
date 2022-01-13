@@ -158,16 +158,14 @@
 
 (defn parse-image!
   "Returns a '![caption](link)' "
-  []
-  (fn
-    [{:keys [image]}]
-    (let [url (or (-> image :file :url)
-                  (-> image :external :url))
-          image-caption (-> image :caption first)
-          caption (str (or (get-in image-caption [:text :content])
-                           (get-in image-caption [:plain_text])
-                           (.toString (java.util.UUID/randomUUID))))]
-      (str "![" caption "]" "(" url ")"))))
+  [{:keys [image]}]
+  (let [url (or (-> image :file :url)
+                (-> image :external :url))
+        image-caption (-> image :caption first)
+        caption (str (or (get-in image-caption [:text :content])
+                         (get-in image-caption [:plain_text])
+                         (.toString (java.util.UUID/randomUUID))))]
+    (str "![" caption "]" "(" url ")")))
 
 (defn fetch-notion-children [id]
   (flatten
