@@ -1,39 +1,10 @@
 (ns notion-to-md.core
   (:gen-class)
   (:require
-    [clojure.data.xml :as xml]
     [clojure.java.io :as io]
     [clojure.string :as str]
     [environ.core :refer [env]]
-    [notion-to-md.http-client :as http-client])
-  (:import
-    (java.io
-      File)
-    (javax.imageio
-      ImageIO)))
-
-(defn- svg?
-  [file-name]
-  (= :svg
-     (try
-       (-> file-name
-           slurp
-           java.io.StringReader.
-           xml/parse
-           :tag)
-       (catch Exception e
-         (-> e
-             .getMessage
-             println)))))
-
-(defn- image-format
-  [file]
-  (some-> (io/input-stream file)
-          ImageIO/createImageInputStream
-          ImageIO/getImageReaders
-          iterator-seq
-          first
-          .getFormatName))
+    [notion-to-md.http-client :as http-client]))
 
 (def docs-path "docs/readme/") ; must end with /
 (def fetch-children (atom (fn [])))
@@ -186,9 +157,8 @@
     (apply-annotations text-element)))
 
 (defn parse-image!
-  "Creates a file and returns a file link markdown formatted
-   It detects the image type"
-  [file-name]
+  "Returns a '![caption](link)' "
+  []
   (fn
     [{:keys [image]}]
     (let [url (or (-> image :file :url)
@@ -196,22 +166,8 @@
           image-caption (-> image :caption first)
           caption (str (or (get-in image-caption [:text :content])
                            (get-in image-caption [:plain_text])
-                           (.toString (java.util.UUID/randomUUID))))
-          raw-file-name (str docs-path caption)]
-      (io/copy (http-client/fetch-image url)
-               (File. raw-file-name))
-      (let [title (str caption
-                       "."
-                       (or (image-format raw-file-name)
-                           (when (svg? raw-file-name) "svg")))
-            full-file-name (str docs-path title)]
-        (.renameTo (File. raw-file-name)
-                   (File. full-file-name))
-        (str
-          "![" title "]"
-          "(" (if (= file-name "README.md")
-                docs-path
-                "./") (str/replace title " " "%20") ")")))))
+                           (.toString (java.util.UUID/randomUUID))))]
+      (str "![" caption "]" "(" url ")"))))
 
 (defn fetch-notion-children [id]
   (flatten
@@ -418,7 +374,7 @@
   (or
     (kind
       {:paragraph parse-paragraph
-       :image (parse-image! file-name)
+       :image parse-image!
        :code (parse-code prefix)
        :callout (parse-callout (str prefix "\t"))
        :toggle parse-toggle!

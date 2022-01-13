@@ -8,7 +8,6 @@
   :dependencies [[org.clojure/data.json "0.2.6"]
                  [environ "1.0.0"]
                  [clj-http "3.12.3"]
-                 [org.clojure/data.xml "0.0.8"]
                  [org.clojure/clojure "1.10.0"]]
   :profiles {:local
              {:dependencies [[com.flexiana/notion-to-md "0.1.9"]]}}
