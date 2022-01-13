@@ -7,7 +7,18 @@
     [notion-to-md.http-client :as http-client])
   (:import
     (java.io
-      File)))
+      File)
+    (javax.imageio
+      ImageIO)))
+
+(defn- image-format
+  [file]
+  (some-> (io/input-stream file)
+          ImageIO/createImageInputStream
+          ImageIO/getImageReaders
+          iterator-seq
+          first
+          .getFormatName))
 
 (def docs-path "docs/readme/") ; must end with /
 (def fetch-children (atom (fn [])))
