@@ -21,7 +21,7 @@ Notion API requires a `page-id` and a `notion-secret` to be able to access a pag
 Add this to your dependencies:
 
 ```clojure
-  [com.flexiana/notion-to-md "0.1.8"]
+  [com.flexiana/notion-to-md "0.1.9"]
 
 ```
 
@@ -30,7 +30,7 @@ Alias it with the following:
 ```clojure
   :profiles {:local
                {:dependencies
-                [[com.flexiana/notion-to-md "0.1.8"]]}}
+                [[com.flexiana/notion-to-md "0.1.9"]]}}
     :aliases {"notion-to-md"     
               ["with-profile" 
                "local" 
@@ -87,7 +87,7 @@ Pass arguments either by:
 
 1. "table" provides "unsupported" for each row.
 
-1. "child_database" is complex and probably is not going to be used in a [`README.md`](http://README.md) so it's not supported by notion-to-md.
+1. "child_database" is complex and probably is not going to be used in a `README.md` so it's not supported by notion-to-md.
 
 1. "link_preview"
 
