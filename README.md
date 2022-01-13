@@ -1,3 +1,8 @@
+![GitHub License](https://img.shields.io/github/license/Flexiana/notion-to-md)
+
+![Clojars Project](https://img.shields.io/clojars/v/com.flexiana/notion-to-md)
+
+
 [Notion to Markdown](https://github.com/Flexiana/notion-to-md): a tool for fetching Notion page trees, written in Clojure. Can be used to sync Readme files.
 
 
@@ -18,7 +23,7 @@ Notion API requires a `page-id` and a `notion-secret` to be able to access a pag
 Add this to your dependencies:
 
 ```clojure
-  [com.flexiana/notion-to-md "0.1.8"]
+  [com.flexiana/notion-to-md "0.1.10"]
 
 ```
 
@@ -27,7 +32,7 @@ Alias it with the following:
 ```clojure
   :profiles {:local
                {:dependencies
-                [[com.flexiana/notion-to-md "0.1.8"]]}}
+                [[com.flexiana/notion-to-md "0.1.10"]]}}
     :aliases {"notion-to-md"     
               ["with-profile" 
                "local" 
@@ -60,6 +65,31 @@ Pass arguments either by:
 
 	```
 
+
+
+## Outputs
+
+- The main notion page (referenced by the NOTION_PAGE_ID environment variable) is going to generate the `README.md` file.
+
+- The sub pages are going to be created inside the `docs/readme/` folder.
+
+
+## Recommendations
+
+1. Avoid using "link_to_page". Use “sub pages” instead. Or use “mention” if you want to make a link. Reason: A "link_to_page" is going to be inlined for technical reasons (the link's title is not easy to get). So, just use “sub pages” or “mentions” for the README files.
+
+
+### Unsupported Notion types
+
+`notion-to-md` does not support the types below:
+
+1. "table_of_contents" doesn’t provide data.
+
+1. "table" provides "unsupported" for each row.
+
+1. "child_database" is complex and probably is not going to be used in a `README.md` so it's not supported by notion-to-md.
+
+1. "link_preview"
 
 
 ### Allowing access to Notion API
@@ -102,4 +132,6 @@ Written and distributed under [**Apache License 2.0**](https://github.com/Flexia
 ## How to guides [internal]
 
 [Update Readme on GitHub](https://www.notion.so/d1ecfe6b4bae41b1b9d22aceca9fb989) 
+
+
 
