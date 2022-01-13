@@ -11,6 +11,6 @@
                  [org.clojure/data.xml "0.0.8"]
                  [org.clojure/clojure "1.10.0"]]
   :profiles {:local
-             {:dependencies [[com.flexiana/notion-to-md "0.1.8"]]}}
+             {:dependencies [[com.flexiana/notion-to-md "0.1.9"]]}}
   :aliases {"notion-to-md"  ["with-profile" "local" "run" "-m" "notion-to-md.core"]}
   :repl-options {:init-ns notion-to-md.core})
