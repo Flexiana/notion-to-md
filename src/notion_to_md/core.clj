@@ -170,7 +170,6 @@
     (str "[" (apply-annotations text-element) "](" link ")")
     (apply-annotations text-element)))
 
-;; TODO add %20 to path
 (defn parse-image!
   "Creates a file and returns a file link markdown formatted
    It detects the image type"
@@ -196,7 +195,7 @@
           "![" title "]"
           "(" (if (= file-name "README.md")
                 docs-path
-                "./") title ")")))))
+                "./") (str/replace file-name " " "%20") ")")))))
 
 (defn fetch-notion-children [id]
   (flatten
